@@ -13,8 +13,19 @@ app.engine('hbs', hbs({
     partialsDir: __dirname + '/views/partials/'
 }));
 
+// Parse request body as JSON
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+//use public folder for javascript and styling
+app.use(express.static("./public"));
+
+//home-scrape javascript 
+const homeScrape = require('./public/js/home-scrape'); 
+
 //home route
 app.get('/', (req, res) => {
+    homeScrape.firstScrape(); 
     res.render('home', {
         layout: 'default',
     });
