@@ -30,9 +30,21 @@ router.get('/articles', (req, res) => {
     }); 
 }); 
 
-router.get('/updateArticles', (req, res) => {
+router.get('/modal/:id', (req, res) => {
+    let id = req.params.id; 
+    Articles.findById(id, function (err, articles) {
+        console.log(articles)
+        res.send(articles)
+    });
+}); 
 
-})
+router.post('/comment', (req, res) => {
+    console.log(req.body);  
+    Articles.updateOne({ _id: req.body.id }, { comments: req.body.comment }, (err, articles) => {
+        console.log(articles)
+    })
+    res.send('hello')
+}); 
 
 module.exports = router; 
 

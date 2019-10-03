@@ -4,16 +4,25 @@
             {{#if articlesArr}}
             {{#each articlesArr}}
             <div class="bg-light m-2 text-dark p-2">
-                <a class="add-comment" id="{{_id}}" >
-                    <img src="/images/pencil.png" class="img-fluid float-right" style="height: 25px; width: 25px;">
-                </a>
+                <button id="{{_id}}" class="img-fluid float-right add-comment btn btn-outline" data-toggle="modal"
+                    data-target="#exampleModal">
+                    <img id="{{_id}}" src="/images/pencil.png" class="img-fluid" style="height: 25px; width: 25px;">
+                </button>
                 <h2>{{title}}</h2>
                 <p>{{summary}}</p>
                 <a class="btn btn-primary" href="{{link}}">Go to article</a>
+                <div class="container bg-danger text-white p-1 m-1 mr-2 ">
+                    <h3>Comments</h3>
+                    {{#if this.comments}}
+                        <p class="text-dark p-2 rounded bg-light "> {{this.comments}} </p>
+                    {{else }}
+                    <p class="text-white"> Be the first to comment on this post! </p>
+                    {{/if }}
+                </div>
             </div>
             {{/each }}
             {{else }}
-            <div class="text-center bg-light text-dark m-2 p-2" id="no-articles" style="display: block;" >
+            <div class="text-center bg-light text-dark m-2 p-2" id="no-articles" style="display: block;">
                 <h2>Click a button to start Scraping </h2>
             </div>
             {{/if }}
@@ -21,3 +30,37 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            {{#if modalTitle}}
+            <div class="modal-header">
+                <h2 class="modal-title text-dark p-1" id="exampleModalLabel">{{modalTitle}}</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {{else }}
+                <div class="modal-header">
+                <h2 class="modal-title text-dark p-1" id="exampleModalLabel">Leave a comment</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+            {{/if }}
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="new-comment" placeholder="comment">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary submit-button" >Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
