@@ -1,8 +1,8 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
+const Articles = require('../../model/article-model');
 
 const homeScrape = {
-
     //constructor for article object
     Story: function (title, link, summary) {
         this.title = title;
@@ -29,46 +29,54 @@ const homeScrape = {
     },
 
     //gets summaries using link from ^
-    summaries: async (item, title, i) => { 
+    summaries: async (item, title, i) => {
         let summaryGrab = new Promise((resolve, reject) => {
             axios
                 .get(item)
                 .then(response => {
                     const $ = cheerio.load(response.data);
                     aSummary = $('div .article-copy').children('p:first-child').text().trim();
-                    resolve(aSummary); 
-            }).catch(err => console.log(err)); 
-        }); 
+                    resolve(aSummary);
+                }).catch(err => console.log(err));
+        });
         summaryGrab.then(result => {
             if (title && item && result) {
                 let newStory = new homeScrape.Story(title, item, result)
-                console.log(newStory)
+               
+                    Articles.create({
+                            title: newStory.title,
+                            link: newStory.link,
+                            summary: newStory.summary
+                        }).then(result => {
+                            console.log('added: ' + result)
+                        })
+                        .catch(err => console.log(err));
+                            
+                    
             }
-        }); 
+        });
     },
 
     //main function to scrape for home page
     firstScrape: async () => {
-        const url = 'https://abcnews.go.com/'; 
-        const stories = []; 
+        const url = 'https://abcnews.go.com/';
+        const stories = [];
         //axios call 
         let firstScrapeObj = new Promise((resolve, reject) => {
             axios
                 .get(url)
                 //scrapes cheerio and makes object with title and link 
                 .then(response => {
-                let tal = homeScrape.titleAndLink(response); 
-                resolve(tal); 
-                }); 
+                    let tal = homeScrape.titleAndLink(response);
+                    resolve(tal);
+                });
         })
-        firstScrapeObj.then((result) => {
-            for (var i =0; i < result.length; i++) {
-                homeScrape.summaries(result[i].link, result[i].title, i); 
-            }
-                
-            
-        })
-        .catch(err => console.log(err)); 
+        firstScrapeObj.then(result => {
+                for (var i = 0; i < result.length; i++) {
+                    homeScrape.summaries(result[i].link, result[i].title, i);
+                }
+            })
+            .catch(err => console.log(err));
     }
-}; 
+};
 module.exports = homeScrape;

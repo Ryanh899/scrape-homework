@@ -1,0 +1,23 @@
+<div class="container bg-dark text-white">
+    <div class="row flex-box justify-content-center">
+        <div class="col-10" id="append-articles">
+            {{#if articlesArr}}
+            {{#each articlesArr}}
+            <div class="bg-light m-2 text-dark p-2">
+                <a class="add-comment" id="{{_id}}" >
+                    <img src="/images/pencil.png" class="img-fluid float-right" style="height: 25px; width: 25px;">
+                </a>
+                <h2>{{title}}</h2>
+                <p>{{summary}}</p>
+                <a class="btn btn-primary" href="{{link}}">Go to article</a>
+            </div>
+            {{/each }}
+            {{else }}
+            <div class="text-center bg-light text-dark m-2 p-2" id="no-articles" style="display: block;" >
+                <h2>Click a button to start Scraping </h2>
+            </div>
+            {{/if }}
+        </div>
+    </div>
+</div>
+

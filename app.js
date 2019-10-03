@@ -1,6 +1,7 @@
 const express = require('express'); 
 const app = express(); 
 const hbs = require('express-handlebars'); 
+const mongoose = require('mongoose'); 
 
 const PORT = process.env.PORT || 3000; 
 
@@ -20,17 +21,16 @@ app.use(express.json());
 //use public folder for javascript and styling
 app.use(express.static("./public"));
 
-//home-scrape javascript 
-const homeScrape = require('./public/js/home-scrape'); 
-
 //home route
 app.get('/', (req, res) => {
-    homeScrape.firstScrape(); 
     res.render('home', {
         layout: 'default',
     });
 })
 
+//scrape routes
+const scrapeRoute = require('./controller/routes/scrape-routes'); 
+app.use(scrapeRoute); 
 
 
 
